@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ article.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Fallback стили если Bootstrap не грузится */
+        .badge { 
+            display: inline-block; 
+            padding: .35em .65em; 
+            font-size: .85em; 
+            border-radius: .25rem;
+            margin: 2px;
+        }
+        .badge-primary { background-color: #0d6efd; color: white; }
+        .badge-secondary { background-color: #6c757d; color: white; }
+    </style>
+</head>
+<body class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>{{ article.title }}</h1>
+            
+            {% if article.image %}
+                <img src="{{ article.image.url }}" class="img-fluid mb-4 rounded" alt="{{ article.title }}" style="max-height: 400px;">
+            {% endif %}
+            
+            <div class="article-text">{{ article.text|linebreaks }}</div>
+            <p class="text-muted mt-3">
+                <small>Опубликовано: {{ article.published_at|date:"d.m.Y H:i" }}</small>
+            </p>
+            
+            <h5 class="mt-4">Разделы:</h5>
+            <div>
+            {% for scope in scopes %}
+                <span class="badge {% if scope.is_main %}badge-primary{% else %}badge-secondary{% endif %}">
+                    {{ scope.tag.name }}
+                </span>
+            {% empty %}
+                <p class="text-muted">Разделы не назначены</p>
+            {% endfor %}
+            </div>
+            
+            <a href="{% url 'news-index' %}" class="btn btn-outline-secondary mt-4">
+                ← Вернуться к списку новостей
+            </a>
+        </div>
+    </div>
+</body>
+</html>
